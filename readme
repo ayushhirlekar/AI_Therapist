@@ -1,0 +1,111 @@
+
+# Mental Health AI Assistant 💙
+
+## Overview
+
+This project is a privacy-first, AI-powered mental health assistant designed to provide empathetic, contextual conversations to users, helping them navigate mental health challenges. The system processes everything locally for data privacy and security.
+
+---
+
+## What We Have Done So Far
+
+### 1. Environment Setup & Backend Foundation
+
+- Installed Python 3.11 and created a virtual environment for dependency management.
+- Developed a Flask backend server running on port 8000 with endpoints:
+  - `/health` for health checks
+  - `/chat` for conversation messages
+- Designed and implemented a SQLite database schema to store conversation sessions, messages (turns), and a knowledge base.
+- Built database connection module with CRUD operations for sessions and turns.
+
+### 2. AI Integration
+
+- Downloaded Mistral 7B quantized language model for efficient local inference.
+- Created an AI service module wrapping the LlamaCpp model for mental health-specific response generation.
+- Integrated the AI module with Flask:
+  - User messages saved to the database
+  - AI responses generated contextually and saved
+  - Full conversation history returned in API responses
+
+### 3. Project Structure
+
+- Organized code into clear modules:
+  - `/backend/app.py` and `/backend/app/` for Flask server
+  - `/backend/database/` for DB schema and logic
+  - `/backend/services/` for AI service
+  - `/backend/models/` for AI model files (ignored in Git)
+  - `/data/` folder for SQLite DB (ignored in Git)
+
+- Created comprehensive `.gitignore`:
+  - Excludes venv, models, database, cache, logs
+
+---
+
+## How to Run Locally
+
+### Prerequisites
+
+- Python 3.11 installed
+- At least 8GB RAM
+
+### Setup Steps
+
+1. Clone this repo:
+```bash
+git clone https://github.com/YOUR_USERNAME/mental-health-assistant.git
+cd mental-health-assistant/backend
+```
+
+2. Create and activate virtual environment:
+```bash
+python -m venv venv
+venv\Scripts\activate  # on Windows
+source venv/bin/activate  # on Linux/Mac
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+4. Download the AI model:
+   - Create the models folder:
+   ```bash
+   mkdir models
+   cd models
+   ```
+   - Download quantized Mistral 7B model:
+```bash
+curl -L -o mistral-7b-instruct-v0.2.Q4_0.gguf https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q4_0.gguf
+```
+
+5. Return to backend folder:
+```bash
+cd ..
+```
+
+6. Run the Flask app:
+```bash
+python app.py
+```
+
+### Testing the API
+
+- Health check:
+```bash
+curl http://localhost:8000/health
+```
+
+- Chat API:
+```bash
+curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{"message": "Hello, I need support"}"
+```
+
+### Notes
+
+- Do NOT commit the `/models/` or `/venv/` folders or the `data/` SQLite DB
+- Use Git branches for feature development
+- Keep `main` branch stable
+
+---
+

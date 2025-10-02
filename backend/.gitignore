@@ -1,0 +1,11 @@
+"# Audio files - do not commit" 
+"*.wav" 
+"*.mp3" 
+"backend/audio_responses/" 
+"backend/test_*.wav" 
+"backend/ai_*.wav" 
+venv/ 
+audio_responses/   
+*.wav 
+*.mp3 
+mha_db.sqlite3 

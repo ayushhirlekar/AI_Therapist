@@ -1,111 +1,1159 @@
+# AI Therapist - Mental Health Assistant 💙🧠
 
-# Mental Health AI Assistant 💙
+A privacy-first, AI-powered mental health assistant that provides empathetic, contextual conversations to help users navigate mental health challenges. Everything runs locally to ensure complete data privacy and security.
 
-## Overview
-
-This project is a privacy-first, AI-powered mental health assistant designed to provide empathetic, contextual conversations to users, helping them navigate mental health challenges. The system processes everything locally for data privacy and security.
-
----
-
-## What We Have Done So Far
-
-### 1. Environment Setup & Backend Foundation
-
-- Installed Python 3.11 and created a virtual environment for dependency management.
-- Developed a Flask backend server running on port 8000 with endpoints:
-  - `/health` for health checks
-  - `/chat` for conversation messages
-- Designed and implemented a SQLite database schema to store conversation sessions, messages (turns), and a knowledge base.
-- Built database connection module with CRUD operations for sessions and turns.
-
-### 2. AI Integration
-
-- Downloaded Mistral 7B quantized language model for efficient local inference.
-- Created an AI service module wrapping the LlamaCpp model for mental health-specific response generation.
-- Integrated the AI module with Flask:
-  - User messages saved to the database
-  - AI responses generated contextually and saved
-  - Full conversation history returned in API responses
-
-### 3. Project Structure
-
-- Organized code into clear modules:
-  - `/backend/app.py` and `/backend/app/` for Flask server
-  - `/backend/database/` for DB schema and logic
-  - `/backend/services/` for AI service
-  - `/backend/models/` for AI model files (ignored in Git)
-  - `/data/` folder for SQLite DB (ignored in Git)
-
-- Created comprehensive `.gitignore`:
-  - Excludes venv, models, database, cache, logs
+> **📝 Note for Windows Users**: This guide is optimized for Windows. All commands are Windows-specific unless otherwise noted.
 
 ---
 
-## How to Run Locally
+## 📋 Table of Contents
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Prerequisites - MUST READ](#prerequisites---must-read)
+- [Complete Step-by-Step Installation](#complete-step-by-step-installation)
+  - [Part 1: Setting Up Your Computer](#part-1-setting-up-your-computer)
+  - [Part 2: Getting the Project](#part-2-getting-the-project)
+  - [Part 3: Backend Setup](#part-3-backend-setup)
+  - [Part 4: Frontend Setup](#part-4-frontend-setup)
+- [Running the Application](#running-the-application)
+- [Understanding What NOT to Push to GitHub](#understanding-what-not-to-push-to-github)
+- [Testing Your Setup](#testing-your-setup)
+- [Common Problems and Solutions](#common-problems-and-solutions)
+- [Complete Dependencies List](#complete-dependencies-list)
+- [Project Maintenance](#project-maintenance)
 
-### Prerequisites
+---
 
-- Python 3.11 installed
-- At least 8GB RAM
+## ✨ Features
 
-### Setup Steps
+- **Privacy-First**: All conversations processed locally - no data sent to external servers
+- **AI-Powered Conversations**: Uses Mistral 7B language model for empathetic responses
+- **Context-Aware**: Maintains conversation history for meaningful interactions
+- **Real-time Communication**: WebSocket support for instant messaging
+- **Voice Interaction**: Text-to-speech and speech recognition capabilities
+- **Session Management**: Tracks and stores conversation sessions in local database
+- **React Frontend**: Modern, responsive user interface
 
-1. Clone this repo:
-```bash
-git clone https://github.com/YOUR_USERNAME/mental-health-assistant.git
-cd mental-health-assistant/backend
+---
+
+## 🛠 Tech Stack
+
+**Backend (Server Side):**
+- Python 3.11 - Programming language
+- Flask - Web framework to create API endpoints
+- Flask-SocketIO - Real-time communication
+- SQLite - Local database (no installation needed)
+- llama-cpp-python - Runs the AI model locally
+- Mistral 7B - The actual AI brain (4GB file)
+- faster-whisper - Converts speech to text
+- edge-tts - Converts text to speech
+
+**Frontend (User Interface):**
+- React.js - JavaScript framework for UI
+- Node.js - JavaScript runtime
+- npm - Package manager for JavaScript
+
+---
+
+## 📁 Project Structure
+
+```
+AI_Therapist/                          # Main project folder
+│
+├── backend/                           # Server-side code
+│   ├── app.py                         # Main Flask application (START HERE)
+│   ├── app/                           # Flask routes and API endpoints
+│   ├── database/                      # Database code
+│   │   ├── schema.sql                 # Database structure
+│   │   └── db_operations.py           # Database functions
+│   ├── services/                      # Business logic
+│   │   └── ai_service.py              # AI model wrapper
+│   ├── models/                        # ⚠️ AI model files (NOT in Git - you download this)
+│   │   └── mistral-7b-instruct-v0.2.Q4_0.gguf  # 4GB AI model
+│   ├── data/                          # ⚠️ Database storage (NOT in Git - auto-created)
+│   │   └── mental_health.db           # SQLite database file
+│   ├── venv/                          # ⚠️ Virtual environment (NOT in Git - you create this)
+│   └── requirements.txt               # Python package list
+│
+├── frontend/                          # Client-side code
+│   ├── public/                        # Static files
+│   ├── src/                           # React source code
+│   │   ├── App.js                     # Main React component
+│   │   ├── index.js                   # Entry point
+│   │   └── components/                # UI components
+│   ├── node_modules/                  # ⚠️ npm packages (NOT in Git - auto-installed)
+│   ├── package.json                   # npm package list
+│   └── package-lock.json              # npm version lock
+│
+├── .gitignore                         # Tells Git what NOT to upload
+└── README.md                          # This file!
+
+⚠️ = Files/folders you create or download locally (NOT pushed to GitHub)
 ```
 
-2. Create and activate virtual environment:
-```bash
+---
+
+## 📦 Prerequisites - MUST READ
+
+### What You Need Before Starting:
+
+#### 1. **Hardware Requirements**
+- **RAM**: Minimum 8GB (the AI model needs this)
+- **Storage**: At least 15GB free space
+  - AI model: ~4GB
+  - Python packages: ~3GB
+  - Node.js packages: ~500MB
+  - Project files: ~100MB
+- **Internet**: Required for initial download only
+
+#### 2. **Software to Install** (We'll do this together)
+- Python 3.11 or higher
+- Node.js 16 or higher (includes npm)
+- Git for version control
+- A code editor (VS Code recommended)
+
+#### 3. **Windows Version**
+- Windows 10 or Windows 11
+- PowerShell or Command Prompt access
+
+---
+
+## 🚀 Complete Step-by-Step Installation
+
+### Part 1: Setting Up Your Computer
+
+#### Step 1.1: Install Python 3.11
+
+1. **Download Python**:
+   - Go to: https://www.python.org/downloads/
+   - Click "Download Python 3.11.x" (get the latest 3.11 version)
+
+2. **Install Python**:
+   - Run the downloaded `.exe` file
+   - ⚠️ **IMPORTANT**: Check the box "Add Python to PATH" at the bottom
+   - Click "Install Now"
+   - Wait for installation to complete
+   - Click "Close"
+
+3. **Verify Installation**:
+   - Press `Win + R`, type `cmd`, press Enter
+   - Type: `python --version`
+   - You should see: `Python 3.11.x`
+   - Type: `pip --version`
+   - You should see pip version info
+
+**If verification fails**: 
+- Restart your computer
+- Try again
+- If still failing, uninstall Python and reinstall with "Add to PATH" checked
+
+---
+
+#### Step 1.2: Install Node.js and npm
+
+1. **Download Node.js**:
+   - Go to: https://nodejs.org/
+   - Download the "LTS" (Long Term Support) version
+   - Should be version 18.x or 20.x
+
+2. **Install Node.js**:
+   - Run the downloaded `.msi` file
+   - Click "Next" through all options (defaults are fine)
+   - Accept the license agreement
+   - Click "Install"
+   - Click "Finish"
+
+3. **Verify Installation**:
+   - Open a NEW Command Prompt (Win + R → cmd → Enter)
+   - Type: `node --version`
+   - You should see: `v18.x.x` or `v20.x.x`
+   - Type: `npm --version`
+   - You should see: `9.x.x` or `10.x.x`
+
+**If verification fails**:
+- Close all Command Prompt windows and open a new one
+- Restart your computer
+- Try verification again
+
+---
+
+#### Step 1.3: Install Git
+
+1. **Download Git**:
+   - Go to: https://git-scm.com/download/win
+   - Download will start automatically
+
+2. **Install Git**:
+   - Run the downloaded `.exe` file
+   - Click "Next" through all options (defaults are fine)
+   - Important option: "Use Git from the Windows Command Prompt" (should be default)
+   - Click "Install"
+   - Click "Finish"
+
+3. **Verify Installation**:
+   - Open Command Prompt
+   - Type: `git --version`
+   - You should see: `git version 2.x.x`
+
+---
+
+#### Step 1.4: Install VS Code (Recommended but Optional)
+
+1. **Download VS Code**:
+   - Go to: https://code.visualstudio.com/
+   - Click "Download for Windows"
+
+2. **Install VS Code**:
+   - Run the downloaded `.exe` file
+   - Accept agreement
+   - Check "Add to PATH" option
+   - Click "Install"
+
+---
+
+### Part 2: Getting the Project
+
+#### Step 2.1: Choose a Location for Your Project
+
+1. **Create a projects folder**:
+   - Open File Explorer
+   - Go to your C: drive or Documents folder
+   - Right-click → New → Folder
+   - Name it `Projects`
+
+2. **Open Command Prompt in that folder**:
+   - Navigate to your Projects folder in File Explorer
+   - Click in the address bar at the top
+   - Type `cmd` and press Enter
+   - Command Prompt opens in that folder
+
+---
+
+#### Step 2.2: Clone the Repository
+
+In the Command Prompt window:
+
+```cmd
+git clone https://github.com/ayushhirlekar/AI_Therapist.git
+```
+
+**What this does**: Downloads all the project files from GitHub to your computer
+
+**Wait for**: 
+```
+Cloning into 'AI_Therapist'...
+...
+done.
+```
+
+**Navigate into the project**:
+```cmd
+cd AI_Therapist
+```
+
+**Verify you're in the right place**:
+```cmd
+dir
+```
+
+You should see folders: `backend`, `frontend`, and files like `README.md`, `.gitignore`
+
+---
+
+### Part 3: Backend Setup
+
+#### Step 3.1: Navigate to Backend Folder
+
+```cmd
+cd backend
+```
+
+**Verify**:
+```cmd
+dir
+```
+
+You should see: `app.py`, `requirements.txt`, folders like `app`, `database`, `services`
+
+---
+
+#### Step 3.2: Create Virtual Environment
+
+**What is a virtual environment?**: An isolated Python installation for this project only. Keeps dependencies separate from your system Python.
+
+**Create it**:
+```cmd
 python -m venv venv
-venv\Scripts\activate  # on Windows
-source venv/bin/activate  # on Linux/Mac
 ```
 
-3. Install dependencies:
-```bash
+**Wait for**: This takes 30-60 seconds. You'll see a new `venv` folder appear.
+
+**Activate it**:
+```cmd
+venv\Scripts\activate
+```
+
+**Verify activation**: Your command prompt should now start with `(venv)`
+
+Example:
+```
+(venv) C:\Projects\AI_Therapist\backend>
+```
+
+⚠️ **IMPORTANT**: You MUST activate the virtual environment every time you work on the backend. If you close the terminal and reopen it, run `venv\Scripts\activate` again.
+
+---
+
+#### Step 3.3: Install Python Dependencies
+
+**Upgrade pip first**:
+```cmd
+python -m pip install --upgrade pip
+```
+
+**Install all packages** (this takes 10-20 minutes):
+```cmd
 pip install -r requirements.txt
 ```
 
-4. Download the AI model:
-   - Create the models folder:
-   ```bash
-   mkdir models
-   cd models
-   ```
-   - Download quantized Mistral 7B model:
-```bash
+**What's happening**: pip is downloading and installing 40+ Python packages from the internet
+
+**You'll see lots of text scrolling**. This is normal. Wait for it to complete.
+
+**Common messages you might see**:
+- "Collecting [package name]" - downloading
+- "Installing collected packages" - installing
+- "Successfully installed" - done!
+
+**Verify installation**:
+```cmd
+pip list
+```
+
+You should see a long list of packages including:
+- Flask
+- torch
+- transformers
+- llama-cpp-python
+- flask-socketio
+- And many more...
+
+**If you see errors**:
+- Make sure you activated the virtual environment (you should see `(venv)`)
+- Make sure you have internet connection
+- Try running the command again
+- Some packages take multiple attempts
+
+---
+
+#### Step 3.4: Create Required Folders
+
+**Create models folder**:
+```cmd
+mkdir models
+```
+
+**Create data folder**:
+```cmd
+mkdir data
+```
+
+**Verify**:
+```cmd
+dir
+```
+
+You should now see `models` and `data` folders.
+
+---
+
+#### Step 3.5: Download the AI Model (LARGEST STEP - 4GB Download)
+
+**This is the brain of your AI assistant. It's a 4GB file.**
+
+**Navigate into models folder**:
+```cmd
+cd models
+```
+
+**Download the model** (choose ONE method):
+
+**Method 1 - Using curl (if available on your Windows)**:
+```cmd
 curl -L -o mistral-7b-instruct-v0.2.Q4_0.gguf https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q4_0.gguf
 ```
 
-5. Return to backend folder:
-```bash
+**Method 2 - Manual Download (RECOMMENDED for Windows)**:
+
+1. Open your web browser
+2. Go to: https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/tree/main
+3. Find the file: `mistral-7b-instruct-v0.2.Q4_0.gguf` (should be ~4GB)
+4. Click on it
+5. Click the download button (↓ icon)
+6. Save it to your Downloads folder
+7. Once downloaded, move the file to: `C:\Projects\AI_Therapist\backend\models\`
+
+**This download will take 10-60 minutes depending on your internet speed.**
+
+**Verify the file**:
+```cmd
+dir
+```
+
+You should see:
+```
+mistral-7b-instruct-v0.2.Q4_0.gguf    (approximately 4GB)
+```
+
+**Return to backend folder**:
+```cmd
 cd ..
 ```
 
-6. Run the Flask app:
-```bash
+You should now be in: `C:\Projects\AI_Therapist\backend`
+
+---
+
+#### Step 3.6: Test Backend Setup
+
+**Make sure virtual environment is still activated** (you should see `(venv)`)
+
+**Run the Flask app**:
+```cmd
 python app.py
 ```
 
-### Testing the API
-
-- Health check:
-```bash
-curl http://localhost:8000/health
+**What you should see**:
+```
+ * Serving Flask app 'app'
+ * Debug mode: on
+ * Running on http://127.0.0.1:8000
+ * Running on http://localhost:8000
 ```
 
-- Chat API:
-```bash
-curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{"message": "Hello, I need support"}"
-```
+⚠️ **If you see errors about missing model**: Double-check the model file is in the correct location and named exactly `mistral-7b-instruct-v0.2.Q4_0.gguf`
 
-### Notes
+**LEAVE THIS WINDOW OPEN** - The backend is now running!
 
-- Do NOT commit the `/models/` or `/venv/` folders or the `data/` SQLite DB
-- Use Git branches for feature development
-- Keep `main` branch stable
+**To test it works**: Open a web browser and go to: http://localhost:8000/health
+
+You should see: `{"status": "healthy"}`
+
+**SUCCESS!** Your backend is working! 🎉
 
 ---
+
+### Part 4: Frontend Setup
+
+**Open a NEW Command Prompt window** (don't close the backend one)
+
+#### Step 4.1: Navigate to Frontend Folder
+
+```cmd
+cd C:\Projects\AI_Therapist\frontend
+```
+
+**Verify you're in the right place**:
+```cmd
+dir
+```
+
+You should see: `package.json`, `package-lock.json`, `public` and `src` folders
+
+---
+
+#### Step 4.2: Install npm Dependencies
+
+**Install all packages** (this takes 5-10 minutes):
+```cmd
+npm install
+```
+
+**What's happening**: npm is downloading hundreds of small JavaScript packages
+
+**You'll see**:
+- Progress bars
+- Package names scrolling
+- "added XXX packages"
+
+**Common warnings you can ignore**:
+- "deprecated" warnings
+- "optional dependency" warnings
+- "peer dependency" warnings
+
+**Verify installation**:
+```cmd
+dir node_modules
+```
+
+You should see a folder with hundreds of subfolders (this is normal!)
+
+---
+
+#### Step 4.3: Start the Frontend
+
+```cmd
+npm start
+```
+
+**What happens**:
+- Webpack compiles your React app
+- Development server starts
+- Your browser automatically opens to http://localhost:3000
+
+**You should see**:
+```
+Compiled successfully!
+
+You can now view frontend in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.x.x:3000
+```
+
+**Your browser should automatically open** showing your AI Therapist interface!
+
+**SUCCESS!** Your frontend is working! 🎉
+
+---
+
+## 🎮 Running the Application
+
+### Every Time You Want to Use the App:
+
+#### Terminal 1 - Backend:
+
+```cmd
+cd C:\Projects\AI_Therapist\backend
+venv\Scripts\activate
+python app.py
+```
+
+Leave this running.
+
+#### Terminal 2 - Frontend:
+
+```cmd
+cd C:\Projects\AI_Therapist\frontend
+npm start
+```
+
+Wait for browser to open.
+
+### Stopping the Application:
+
+- Press `Ctrl + C` in both terminal windows
+- Close the browser tabs
+- Type `deactivate` in the backend terminal to deactivate the virtual environment
+
+---
+
+## 🚫 Understanding What NOT to Push to GitHub
+
+### Why Some Files Shouldn't Be on GitHub:
+
+#### 1. **Large Files** (GitHub has a 2GB file limit per file, 100MB recommended max)
+
+```
+❌ backend/models/*.gguf          # AI model - 4GB
+❌ *.db                            # Database files - contain user data
+```
+
+**Why**: Too large, would make repository huge and slow
+
+**What to do**: Download separately (as you did in Step 3.5)
+
+---
+
+#### 2. **Dependencies** (Can be reinstalled)
+
+```
+❌ backend/venv/                   # Python virtual environment - 2-3GB
+❌ frontend/node_modules/          # npm packages - 500MB+
+```
+
+**Why**: 
+- Make repository massive
+- Platform-specific (Windows vs Mac vs Linux)
+- Can be recreated with `pip install` and `npm install`
+
+**What to do**: Everyone creates their own using `requirements.txt` and `package.json`
+
+---
+
+#### 3. **Generated/Cache Files** (Auto-created)
+
+```
+❌ __pycache__/                    # Python cache
+❌ *.pyc                           # Compiled Python
+❌ .pytest_cache/                  # Test cache
+❌ *.log                           # Log files
+```
+
+**Why**: Automatically regenerated, unnecessary clutter
+
+---
+
+#### 4. **Sensitive Information** (Security risk)
+
+```
+❌ .env                            # Environment variables (API keys, passwords)
+❌ *.db                            # User data and conversations
+```
+
+**Why**: Privacy and security - never upload user data or secrets
+
+---
+
+### Your .gitignore File Protects You
+
+The `.gitignore` file tells Git to ignore these files automatically. It's already configured in this project.
+
+**To verify what Git is tracking**:
+```cmd
+git status
+```
+
+**You should NOT see**:
+- Anything from `venv/`
+- Anything from `node_modules/`
+- `.gguf` files
+- `.db` files
+
+**You SHOULD see**:
+- `.py` files (Python source code)
+- `.js`, `.jsx` files (JavaScript source)
+- `.json` files (configuration)
+- `.md` files (documentation)
+- `.css` files (styling)
+
+---
+
+## ✅ Testing Your Setup
+
+### Test 1: Backend Health Check
+
+1. Make sure backend is running
+2. Open browser: http://localhost:8000/health
+3. Should see: `{"status": "healthy"}`
+
+---
+
+### Test 2: Chat API Test
+
+**Open Command Prompt** (third terminal):
+
+```cmd
+curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\": \"Hello, I need support\"}"
+```
+
+**Expected**: JSON response with AI-generated message
+
+**If curl doesn't work on Windows**: Use Postman or test through the frontend
+
+---
+
+### Test 3: Frontend Connection
+
+1. Open: http://localhost:3000
+2. Type a message in the chat interface
+3. Click Send
+4. Should receive AI response within 5-10 seconds
+
+---
+
+## 🐛 Common Problems and Solutions
+
+### Problem 1: "python is not recognized"
+
+**Symptoms**: When typing `python --version`, you get an error
+
+**Solutions**:
+1. Close Command Prompt and reopen
+2. Restart computer
+3. Reinstall Python with "Add to PATH" checked
+4. Manually add Python to PATH:
+   - Search "Environment Variables" in Windows
+   - Edit "Path" variable
+   - Add: `C:\Python311\` and `C:\Python311\Scripts\`
+
+---
+
+### Problem 2: "pip install" fails with errors
+
+**Symptoms**: Red error text during `pip install -r requirements.txt`
+
+**Solutions**:
+
+**If "Microsoft Visual C++ required"**:
+1. Download: https://visualstudio.microsoft.com/downloads/
+2. Install "Build Tools for Visual Studio"
+3. Select "C++ build tools" workload
+4. Install and restart
+5. Try `pip install` again
+
+**If "No module named..."**:
+```cmd
+pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt
+```
+
+**If specific package fails**:
+- Skip it temporarily
+- Install others
+- Try problem package alone: `pip install [package-name]`
+
+---
+
+### Problem 3: Virtual environment won't activate
+
+**Symptoms**: `venv\Scripts\activate` doesn't work or does nothing
+
+**Solutions**:
+
+**Try**: PowerShell activation
+```powershell
+venv\Scripts\Activate.ps1
+```
+
+**If "cannot be loaded because running scripts is disabled"**:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+Then try activating again.
+
+**Alternative**: Use Command Prompt (cmd), not PowerShell
+
+---
+
+### Problem 4: Model file not found
+
+**Symptoms**: Error when starting backend: "Model file not found"
+
+**Solutions**:
+1. Check file location: `dir backend\models\`
+2. Verify filename exactly matches: `mistral-7b-instruct-v0.2.Q4_0.gguf`
+3. Check file size: Should be ~4GB (3.8-4.2GB)
+4. If corrupted, download again
+
+**Check the path in code**:
+- Open `backend/services/ai_service.py`
+- Look for model path
+- Make sure it matches your file location
+
+---
+
+### Problem 5: Port already in use
+
+**Symptoms**: 
+- Backend: "Address already in use" on port 8000
+- Frontend: "Port 3000 is already in use"
+
+**Solutions**:
+
+**For port 8000**:
+```cmd
+netstat -ano | findstr :8000
+```
+Find the PID (last column), then:
+```cmd
+taskkill /PID [number] /F
+```
+
+**For port 3000**:
+```cmd
+netstat -ano | findstr :3000
+taskkill /PID [number] /F
+```
+
+**Or**: Frontend will ask "Would you like to run on another port?" - type `Y`
+
+---
+
+### Problem 6: "npm" command not found
+
+**Symptoms**: When typing `npm --version`, you get an error
+
+**Solutions**:
+1. Close and reopen Command Prompt
+2. Restart computer  
+3. Reinstall Node.js
+4. Check PATH includes: `C:\Program Files\nodejs\`
+
+---
+
+### Problem 7: Out of memory when loading model
+
+**Symptoms**: Backend crashes or freezes when starting
+
+**Solutions**:
+1. Close unnecessary applications
+2. Use smaller model (Q2 or Q3 quantization instead of Q4)
+3. Increase virtual memory:
+   - Right-click "This PC" → Properties
+   - Advanced system settings
+   - Performance → Settings
+   - Advanced → Virtual memory → Change
+   - Set custom size: 8192MB - 16384MB
+
+---
+
+### Problem 8: Git push fails - file too large
+
+**Symptoms**: Error when pushing: "file too large" or "exceeds 100MB"
+
+**Solutions**:
+
+**Check what's being tracked**:
+```cmd
+git status
+```
+
+**If .gguf or large files appear**:
+```cmd
+git rm --cached backend/models/*.gguf
+git rm --cached backend/data/*.db
+```
+
+**Update .gitignore**:
+```cmd
+echo *.gguf >> .gitignore
+echo *.db >> .gitignore
+git add .gitignore
+git commit -m "Update gitignore"
+```
+
+---
+
+### Problem 9: Frontend shows blank page
+
+**Symptoms**: http://localhost:3000 opens but shows nothing
+
+**Solutions**:
+1. Check browser console (F12) for errors
+2. Verify backend is running on port 8000
+3. Check CORS settings in `backend/app.py`
+4. Clear browser cache
+5. Try incognito/private mode
+
+---
+
+### Problem 10: AI responses very slow
+
+**Symptoms**: Takes 30+ seconds to get response
+
+**Expected**: 5-10 seconds is normal for this model
+
+**Solutions**:
+1. Close other applications
+2. Check CPU usage (Task Manager)
+3. This is normal for local AI - it's processing on your CPU
+4. Consider smaller model or cloud API for faster responses
+
+---
+
+## 📚 Complete Dependencies List
+
+### Backend Python Packages (requirements.txt)
+
+```
+Flask==2.3.3                          # Web framework
+Flask-Cors==4.0.0                     # Cross-origin requests
+Flask-SocketIO==5.5.1                 # WebSocket support
+python-socketio==5.13.0               # SocketIO client/server
+python-engineio==4.12.2               # Engine.IO protocol
+
+llama_cpp_python==0.2.11              # AI model inference (LOCAL)
+transformers==4.35.0                  # Hugging Face transformers
+torch==2.8.0                          # PyTorch deep learning
+torchvision==0.23.0                   # Computer vision
+sentence-transformers==2.2.2          # Sentence embeddings
+tokenizers==0.14.1                    # Fast tokenization
+safetensors==0.6.2                    # Safe tensor serialization
+
+faster-whisper==0.9.0                 # Speech-to-text
+edge-tts==7.2.3                       # Text-to-speech (Microsoft)
+pyttsx3==2.99                         # Offline text-to-speech
+pydub==0.25.1                         # Audio processing
+
+nltk==3.9.1                           # Natural language toolkit
+scikit-learn==1.7.1                   # Machine learning algorithms
+scipy==1.11.3                         # Scientific computing
+numpy==1.24.3                         # Numerical arrays
+numba==0.61.2                         # JIT compiler
+llvmlite==0.44.0                      # LLVM binding
+
+huggingface-hub==0.17.3               # Model hub access
+ctranslate2==3.24.0                   # Fast inference engine
+onnxruntime==1.22.1                   # ONNX model runtime
+openai-whisper==20250625              # OpenAI Whisper models
+
+aiohttp==3.12.15                      # Async HTTP client
+aiohappyeyeballs==2.6.1               # Async DNS resolver
+aiosignal==1.4.0                      # Async signal support
+requests==2.31.0                      # HTTP library
+urllib3==2.5.0                        # HTTP client
+certifi==2025.8.3                     # SSL certificates
+charset-normalizer==3.4.3             # Character encoding
+
+bidict==0.23.1                        # Bidirectional dict
+coloredlogs==15.0.1                   # Colored logs
+humanfriendly==10.0                   # Human-readable formats
+diskcache==5.6.3                      # Disk caching
+joblib==1.5.2                         # Parallel processing
+
+Werkzeug==3.1.3                       # WSGI utilities
+Jinja2==3.1.6                         # Template engine
+MarkupSafe==3.0.2                     # String escaping
+click==8.2.1                          # CLI creation
+itsdangerous==2.2.0                   # Secure cookies
+blinker==1.9.0                        # Signal support
+
+pygame==2.6.1                         # Game development (for audio)
+pillow==11.3.0                        # Image processing
+av==10.0.0                            # Video processing
+comtypes==1.4.12                      # COM automation (Windows)
+
+PyYAML==6.0.2                         # YAML parser
+packaging==25.0                       # Package version handling
+filelock==3.19.1                      # File locking
+fsspec==2025.7.0                      # File system spec
+tqdm==4.67.1                          # Progress bars
+regex==2025.8.29                      # Regular expressions
+tabulate==0.9.0                       # Pretty tables
+
+pywin32==311                          # Windows API access
+pypiwin32==223                        # PyWin32 installer
+pyreadline3==3.5.4                    # Readline for Windows
+
+# Development/testing
+black==23.7.0                         # Code formatter
+pytest==7.4.0                         # Testing framework
+iniconfig==2.1.0                      # INI parser
+pluggy==1.6.0                         # Plugin system
+
+# Additional utilities
+more-itertools==10.7.0                # Iterator tools
+mypy_extensions==1.1.1                # Type checking
+pathspec==0.12.1                      # Path matching
+platformdirs==4.4.0                   # Platform directories
+tiktoken==0.11.0                      # Tokenizer
+sympy==1.14.0                         # Symbolic math
+mpmath==1.3.0                         # Math library
+networkx==3.5                         # Network analysis
+flatbuffers==25.2.10                  # Serialization
+protobuf==6.32.0                      # Protocol buffers
+attrs==25.3.0                         # Classes without boilerplate
+frozenlist==1.7.0                     # Frozen list
+multidict==6.6.4                      # Multi-value dict
+propcache==0.3.2                      # Property caching
+yarl==1.20.1                          # URL parsing
+h11==0.16.0                           # HTTP/1.1 protocol
+wsproto==1.2.0                        # WebSocket protocol
+simple-websocket==1.1.0               # Simple WebSocket
+git-filter-repo==2.47.0               # Git history filtering
+colorama==0.4.6                       # Colored terminal (Windows)
+```
+
+**Total Size**: ~3-4GB installed
+
+---
+$ pip list
+Package               Version
+--------------------- ---------
+aiohappyeyeballs      2.6.1
+aiohttp               3.12.15
+aiosignal             1.4.0
+attrs                 25.3.0
+av                    10.0.0
+bidict                0.23.1
+black                 23.7.0
+blinker               1.9.0
+certifi               2025.8.3
+charset-normalizer    3.4.3
+click                 8.2.1
+colorama              0.4.6
+coloredlogs           15.0.1
+comtypes              1.4.12
+ctranslate2           3.24.0
+diskcache             5.6.3
+edge-tts              7.2.3
+faster-whisper        0.9.0
+filelock              3.19.1
+Flask                 2.3.3
+Flask-Cors            4.0.0
+Flask-SocketIO        5.5.1
+flatbuffers           25.2.10
+frozenlist            1.7.0
+fsspec                2025.7.0
+git-filter-repo       2.47.0
+h11                   0.16.0
+huggingface-hub       0.17.3
+humanfriendly         10.0
+idna                  3.10
+iniconfig             2.1.0
+itsdangerous          2.2.0
+Jinja2                3.1.6
+joblib                1.5.2
+llama_cpp_python      0.2.11
+llvmlite              0.44.0
+MarkupSafe            3.0.2
+more-itertools        10.7.0
+mpmath                1.3.0
+multidict             6.6.4
+mypy_extensions       1.1.0
+networkx              3.5
+nltk                  3.9.1
+numba                 0.61.2
+numpy                 1.24.3
+onnxruntime           1.22.1
+openai-whisper        20250625
+packaging             25.0
+pathspec              0.12.1
+pillow                11.3.0
+pip                   25.2
+platformdirs          4.4.0
+pluggy                1.6.0
+propcache             0.3.2
+protobuf              6.32.0
+pydub                 0.25.1
+pygame                2.6.1
+pypiwin32             223
+pyreadline3           3.5.4
+pytest                7.4.0
+python-engineio       4.12.2
+python-socketio       5.13.0
+pyttsx3               2.99
+pywin32               311
+PyYAML                6.0.2
+regex                 2025.8.29
+requests              2.31.0
+safetensors           0.6.2
+scikit-learn          1.7.1
+scipy                 1.11.3
+sentence-transformers 2.2.2
+sentencepiece         0.2.1
+setuptools            65.5.0
+simple-websocket      1.1.0
+sympy                 1.14.0
+tabulate              0.9.0
+threadpoolctl         3.6.0
+tiktoken              0.11.0
+tokenizers            0.14.1
+torch                 2.8.0
+torchvision           0.23.0
+tqdm                  4.67.1
+transformers          4.35.0
+typing_extensions     4.15.0
+urllib3               2.5.0
+Werkzeug              3.1.3
+wsproto               1.2.0
+yarl                  1.20.1
+
+imp packages
+
+### Frontend npm Packages (package.json)
+
+The frontend uses hundreds of npm packages. Main ones include:
+
+```json
+{
+  "dependencies": {
+    "react": "^18.x",              // UI library
+    "react-dom": "^18.x",          // React DOM rendering
+    "react-scripts": "5.x",        // Build tooling
+    "web-vitals": "^2.x"           // Performance monitoring
+  }
+}
+```
+
+Plus hundreds of sub-dependencies managed automatically by npm.
+
+**Total Size**: ~500MB-1GB installed in `node_modules/`
+
+---
+
+## 🔄 Project Maintenance
+
+### Updating Dependencies
+
+**Backend**:
+```cmd
+cd backend
+venv\Scripts\activate
+pip install --upgrade -r requirements.txt
+```
+
+**Frontend**:
+```cmd
+cd frontend
+npm update
+```
+
+---
+
+### Pulling Latest Changes from GitHub
+
+```cmd
+cd C:\Projects\AI_Therapist
+git pull origin main
+```
+
+Then reinstall dependencies if `requirements.txt` or `package.json` changed.
+
+---
+
+### Creating a New Feature
+
+```cmd
+git checkout -b feature-name
+# Make your changes
+git add .
+git commit -m "Description of changes"
+git push origin feature-name
+```
+
+---
+
+### Cleaning Up
+
+**Remove Python cache**:
+```cmd
+cd backend
+rmdir /s /q __pycache__
+del /s *.pyc
+```
+
+**Rebuild virtual environment**:
+```cmd
+cd backend
+rmdir /s /q venv
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+**Rebuild node_modules**:
+```cmd
+cd frontend
+rmdir /s /q node_modules
+npm install
+```
+
+---
+
+## 📞 Support & Resources
+
+### Getting Help
+
+1. **Check this README first** - Most common issues are covered
+2. **Search existing GitHub issues**: https://github.com/ayushhirlekar/AI_Therapist/issues
+3. **Create a new issue** with:
+   - What you were trying to do
+   - What command you ran
+   - Full error message
+   - Your Windows version
+   - Python version (`python --version`)
+   - Node version (`node --version`)
 

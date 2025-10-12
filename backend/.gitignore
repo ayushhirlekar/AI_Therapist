@@ -8,4 +8,5 @@ venv/
 audio_responses/   
 *.wav 
 *.mp3 
+.env
 mha_db.sqlite3 

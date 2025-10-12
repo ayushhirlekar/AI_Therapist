@@ -11,3 +11,5 @@ numpy==1.24.3
 scipy==1.11.3
 pytest==7.4.0
 black==23.7.0
+groq
+python-dotenv

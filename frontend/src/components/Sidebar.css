@@ -1,0 +1,83 @@
+/* ============================================
+   Reusable Sidebar Component
+   ============================================ */
+
+.app-sidebar {
+  width: 70px;
+  background: #FFFFFF;
+  border-right: 1px solid #F1F5F9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 0;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.sidebar-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  align-items: center;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94A3B8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  position: relative;
+}
+
+.sidebar-icon:hover {
+  color: #1A73E8;
+  background: #F8FAFC;
+}
+
+.sidebar-icon.active {
+  color: #1A73E8;
+  background: #EFF6FF;
+}
+
+.sidebar-icon.active::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 24px;
+  background: #1A73E8;
+  border-radius: 0 2px 2px 0;
+}
+
+.logo-icon {
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.logo-icon:hover {
+  background: transparent;
+  transform: scale(1.05);
+}
+
+.sidebar-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}

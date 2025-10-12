@@ -1,0 +1,80 @@
+/* Voice Chat Interface - Same design as text */
+
+.voice-input-area {
+  max-width: 900px;
+  margin: 20px auto 0 auto;
+  width: 100%;
+}
+
+.record-btn {
+  width: 100%;
+  background: #fffbeb;
+  border: 2px solid #fef3c7;
+  border-radius: 9999px;
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  color: #3b82f6;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s;
+}
+
+.record-btn:hover:not(:disabled) {
+  background: #fef3c7;
+  border-color: #fde68a;
+  transform: scale(1.01);
+}
+
+.record-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.record-btn.recording {
+  background: #fee2e2;
+  border-color: #fecaca;
+  color: #dc2626;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+}
+
+.audio-play {
+  margin-left: 10px;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #3b82f6;
+  transition: all 0.2s;
+}
+
+.audio-play:hover {
+  background: #dbeafe;
+  transform: scale(1.1);
+}
+
+.transcribing {
+  font-style: italic;
+  color: #64748b !important;
+  animation: pulse-text 1.5s infinite;
+}
+
+@keyframes pulse-text {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+

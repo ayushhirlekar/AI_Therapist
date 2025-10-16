@@ -38,11 +38,11 @@ function Welcome() {
         <div className="status-bar-top">
           <div className="status-item">
             <span className="status-dot green"></span>
-            <span>Online</span>
+            <span></span>
           </div>
           <div className="status-item">
             <span className="status-dot orange"></span>
-            <span>Active</span>
+            <span></span>
           </div>
         </div>
 

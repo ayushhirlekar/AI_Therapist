@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Sparkles, Clock, ThumbsUp, User } from 'lucide-react';
+import { Home, Clock, BarChart2, MessageCircle, User } from 'lucide-react';
 import './Sidebar.css';
 
 function Sidebar() {
@@ -8,57 +8,50 @@ function Sidebar() {
   const location = useLocation();
 
   return (
-    <div className="app-sidebar">
-      
-      {/* Logo - Always navigates home */}
+    <div className="sidebar">
+
+      {/* Logo */}
+      <div className="sidebar-logo" onClick={() => navigate('/')}>
+        <img src="/logo.jpg" alt="NEO" />
+      </div>
+
+      {/* Icons */}
       <div className="sidebar-icons">
-        <div 
-          className="sidebar-icon logo-icon" 
+        <button
+          className={`icon-btn ${location.pathname === '/' ? 'active' : ''}`}
           onClick={() => navigate('/')}
-          title="Home"
         >
-          <img src="/logo.jpg" alt="NEO" className="sidebar-logo" />
-        </div>
-        
-        {/* New Session */}
-        <div 
-          className={`sidebar-icon ${location.pathname === '/chat' ? 'active' : ''}`}
-          onClick={() => navigate('/chat')}
-          title="New Session"
+          <Home size={22} />
+        </button>
+        <button
+          className={`icon-btn ${location.pathname === '/history' ? 'active' : ''}`}
+          onClick={() => navigate('/history')}
         >
-          <Sparkles size={20} />
-        </div>
-        
-        {/* History */}
-        <div 
-          className="sidebar-icon"
-          onClick={() => console.log('History clicked')}
-          title="Session History"
+          <Clock size={22} />
+        </button>
+        <button
+          className={`icon-btn ${location.pathname === '/insights' ? 'active' : ''}`}
+          onClick={() => navigate('/insights')}
         >
-          <Clock size={20} />
-        </div>
-        
-        {/* Insights */}
-        <div 
-          className="sidebar-icon"
-          onClick={() => console.log('Insights clicked')}
-          title="Wellness Insights"
+          <BarChart2 size={22} />
+        </button>
+        <button
+          className={`icon-btn ${location.pathname === '/feedback' ? 'active' : ''}`}
+          onClick={() => navigate('/feedback')}
         >
-          <ThumbsUp size={20} />
-        </div>
+          <MessageCircle size={22} />
+        </button>
       </div>
 
-      {/* User Profile - Bottom */}
-      <div className="sidebar-bottom">
-        <div 
-          className="sidebar-icon"
-          onClick={() => console.log('Profile clicked')}
-          title="Profile"
+      {/* Bottom User Icon */}
+      <div className="sidebar-icons bottom">
+        <button
+          className={`icon-btn ${location.pathname === '/profile' ? 'active' : ''}`}
+          onClick={() => navigate('/profile')}
         >
-          <User size={20} />
-        </div>
+          <User size={22} />
+        </button>
       </div>
-
     </div>
   );
 }

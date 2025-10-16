@@ -23,8 +23,12 @@
 }
 
 .sidebar-logo {
-  margin-bottom: 40px;
+  margin-bottom: 60px; /* increased from 40px to 60px */
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px; /* adds fixed space to prevent overlap */
 }
 
 .sidebar-logo img {

@@ -101,72 +101,10 @@ def chat():
         traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
-@app.route('/voice-chat', methods=['POST'])
-def voice_chat():
-    """Voice chat endpoint - transcribes audio and returns text response"""
-    try:
-        if 'audio' not in request.files:
-            return jsonify({'error': 'No audio file provided'}), 400
-        
-        audio = request.files['audio']
-        session_id = request.form.get('session_id')
-        
-        if not session_id:
-            session_id = create_session()
-            print(f"✅ Created new session: {session_id}")
-        
-        # Save temporary audio file
-        temp_path = f"temp_audio_{session_id}.wav"
-        audio.save(temp_path)
-        
-        # Transcribe audio
-        print("🎧 Transcribing audio...", flush=True)
-        user_message = voice_service.transcribe_audio(temp_path)
-        
-        # Clean up temp file
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
-        
-        if not user_message:
-            return jsonify({'error': 'Failed to transcribe audio'}), 500
-        
-        print(f"✅ Transcribed: {user_message[:50]}...")
-        
-        # Save user message
-        save_turn(session_id, 'user', user_message)
-        
-        # Get conversation history
-        conversation = get_session_turns(session_id)
-        
-        # Generate AI response
-        print("🤖 Generating AI response...", flush=True)
-        assistant_reply = ai_service.generate_response(
-            user_message, 
-            [dict(row) for row in conversation]
-        )
-        
-        # Save assistant response
-        save_turn(session_id, 'assistant', assistant_reply)
-        
-        # Get updated conversation
-        updated_conversation = get_session_turns(session_id)
-        
-        return jsonify({
-            'session_id': session_id,
-            'transcribed_text': user_message,
-            'reply': assistant_reply,
-            'conversation': [dict(row) for row in updated_conversation]
-        })
-    
-    except Exception as e:
-        print(f"❌ Voice chat error: {str(e)}")
-        traceback.print_exc()
-        return jsonify({'error': str(e)}), 500
 
 @app.route('/voice-chat-complete', methods=['POST'])
-@app.route('/voice-chat-complete', methods=['POST'])
 def voice_chat_complete():
-    """Complete voice chat endpoint - WITH DETAILED TIMING DIAGNOSTICS"""
+    """Complete voice chat endpoint - WITH NATURAL VOICE"""
     try:
         # Track total pipeline time
         pipeline_start = time.time()
@@ -235,7 +173,7 @@ def voice_chat_complete():
         print(f"⏱️  Step 3 (Database ops): {step3_time:.3f}s")
         
         # ============================================================
-        # STEP 4: Generate AI Response (THE BOTTLENECK!)
+        # STEP 4: Generate AI Response
         # ============================================================
         print("\n🧠 Generating AI response...")
         step4_start = time.time()
@@ -247,7 +185,7 @@ def voice_chat_complete():
         
         step4_time = time.time() - step4_start
         print(f"✅ AI response: {assistant_reply[:100]}...")
-        print(f"⏱️  Step 4 (AI Generation): {step4_time:.3f}s ← CHECK THIS!")
+        print(f"⏱️  Step 4 (AI Generation): {step4_time:.3f}s")
         
         # ============================================================
         # STEP 5: Save AI Response
@@ -261,12 +199,30 @@ def voice_chat_complete():
         print(f"⏱️  Step 5 (Save AI response): {step5_time:.3f}s")
         
         # ============================================================
-        # STEP 6: Generate TTS Audio
+        # STEP 6: Generate TTS Audio with NATURAL VOICE
         # ============================================================
-        print("\n🎤 Generating TTS audio...")
+        print("\n🎤 Generating TTS audio with natural voice...")
         step6_start = time.time()
         
-        audio_file = tts_service.generate_speech(assistant_reply)
+        # Clean up text for more natural TTS
+        clean_text = assistant_reply.strip()
+        clean_text = clean_text.replace('...', '.')
+        clean_text = clean_text.replace('..', '.')
+        
+        # Try different voices in order of naturalness
+        voices_to_try = ['michelle', 'emma', 'ashley', 'aria']
+        audio_file = None
+        
+        for voice_name in voices_to_try:
+            try:
+                print(f"   Trying voice: {voice_name}")
+                audio_file = tts_service.generate_speech(clean_text, voice_name="emma")
+                if audio_file and os.path.exists(audio_file):
+                    print(f"   ✅ Success with {voice_name}")
+                    break
+            except Exception as voice_error:
+                print(f"   ❌ {voice_name} failed: {voice_error}")
+                continue
         
         step6_time = time.time() - step6_start
         print(f"✅ TTS audio created: {audio_file}")
@@ -287,25 +243,12 @@ def voice_chat_complete():
         print(f"   Step 1 - Receive Audio:     {step1_time:>6.2f}s")
         print(f"   Step 2 - Transcription:      {step2_time:>6.2f}s")
         print(f"   Step 3 - Database ops:       {step3_time:>6.2f}s")
-        print(f"   Step 4 - AI Generation:      {step4_time:>6.2f}s  ⚠️  BOTTLENECK!")
+        print(f"   Step 4 - AI Generation:      {step4_time:>6.2f}s")
         print(f"   Step 5 - Save AI response:   {step5_time:>6.2f}s")
         print(f"   Step 6 - TTS Audio:          {step6_time:>6.2f}s")
         print("-"*70)
         print(f"   TOTAL PIPELINE TIME:         {total_time:>6.2f}s")
         print("="*70 + "\n")
-        
-        # Identify the slowest component
-        times = {
-            'Transcription': step2_time,
-            'AI Generation': step4_time,
-            'TTS': step6_time
-        }
-        slowest = max(times.items(), key=lambda x: x[1])
-        print(f"🐌 Slowest component: {slowest[0]} ({slowest[1]:.2f}s)")
-        
-        if step4_time > 5.0:
-            print("⚠️  WARNING: AI generation is very slow!")
-            print("💡 SOLUTION: Consider switching to Groq API for 10x speed boost")
         
         print("✅ SUCCESS - Returning response\n")
         
@@ -474,4 +417,4 @@ if __name__ == '__main__':
     print("\n🎙️ Starting Flask server on http://0.0.0.0:8000")
     print("🌐 Frontend should connect from: http://localhost:3000")
     print("=" * 60)
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=8000, debug=True)

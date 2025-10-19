@@ -64,7 +64,7 @@ function VoiceChat() {
 
       mediaRecorderRef.current.onstop = processAudio;
 
-      setStatus('👂 Listening...');
+      setStatus(' Listening...');
       detectVoice();
       console.log('✅ Voice chat initialized');
     } catch (error) {
@@ -89,7 +89,7 @@ function VoiceChat() {
     if (rms > 25 && !stateRef.current.isRecording && !stateRef.current.isProcessing && !stateRef.current.isPaused) {
       console.log('🎤 Recording...');
       stateRef.current.isRecording = true;
-      setStatus('🎤 Speaking...');
+      setStatus(' Speaking...');
       audioChunksRef.current = [];
 
       if (mediaRecorderRef.current?.state === 'inactive') {
@@ -138,7 +138,7 @@ function VoiceChat() {
     }
 
     stateRef.current.isProcessing = true;
-    setStatus('🤔 Processing...');
+    setStatus(' Processing...');
 
     try {
       const formData = new FormData();
@@ -185,29 +185,29 @@ function VoiceChat() {
         audio.onended = () => {
           console.log('✅ Done - resuming');
           stateRef.current.isProcessing = false;
-          setStatus('👂 Listening...');
+          setStatus(' Listening...');
         };
 
         audio.onerror = () => {
           stateRef.current.isProcessing = false;
-          setStatus('👂 Listening...');
+          setStatus(' Listening...');
         };
 
         audio.play().catch(e => {
           console.log('Playback blocked:', e);
           stateRef.current.isProcessing = false;
-          setStatus('👂 Listening...');
+          setStatus(' Listening...');
         });
       } else {
         stateRef.current.isProcessing = false;
-        setStatus('👂 Listening...');
+        setStatus(' Listening...');
       }
 
     } catch (error) {
       console.error('❌ Process error:', error);
       setMessages(prev => [...prev, { type: 'bot', text: 'Error processing. Try again.', timestamp: new Date() }]);
       stateRef.current.isProcessing = false;
-      setStatus('👂 Listening...');
+      setStatus(' Listening...');
     }
 
     audioChunksRef.current = [];
@@ -225,7 +225,7 @@ function VoiceChat() {
       setStatus('⏸️ Paused');
     } else {
       // Resuming
-      setStatus('👂 Listening...');
+      setStatus(' Listening...');
     }
   };
 

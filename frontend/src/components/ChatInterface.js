@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Home, Info, Grid, Video, User, HelpCircle, MessageSquare, X, Send } from 'lucide-react';
+import { Home, Clock, BarChart2, MessageCircle, Send, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './ChatInterface.css';
 
@@ -8,7 +8,7 @@ function ChatInterface() {
   const [messages, setMessages] = useState([
     {
       type: 'bot',
-      text: "hey there! how's it going today? what's on your mind?",
+      text: "Hey there! How's it going today? What's on your mind?",
       timestamp: new Date()
     }
   ]);
@@ -63,9 +63,9 @@ function ChatInterface() {
         text: "Sorry, I'm having trouble connecting. Please try again.",
         timestamp: new Date()
       }]);
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const handleKeyPress = (e) => {
@@ -76,80 +76,117 @@ function ChatInterface() {
   };
 
   return (
-    <div className="chat-container">
-      
+    <div className="chat-wrapper">
       {/* Sidebar */}
       <div className="sidebar">
-        <div className="sidebar-logo" onClick={() => navigate('/')}>NEO</div>
-        
-        <div className="sidebar-icons">
-          <button className="icon-btn" onClick={() => navigate('/')}><Home size={20} /></button>
-          <button className="icon-btn"><Info size={20} /></button>
-          <button className="icon-btn"><Grid size={20} /></button>
-          <button className="icon-btn"><Video size={20} /></button>
-          <button className="icon-btn"><User size={20} /></button>
-          <button className="icon-btn"><HelpCircle size={20} /></button>
+        <div className="sidebar-logo">
+          <div className="logo-circle">NEO</div>
         </div>
-        
-        <div className="sidebar-chat">
-          <button className="chat-btn active"><MessageSquare size={20} /></button>
+
+        <div className="sidebar-icons">
+          <button className="icon-btn" onClick={() => navigate('/')} title="Home">
+            <Home size={22} />
+          </button>
+          <button className="icon-btn" onClick={() => navigate('/history')} title="History">
+            <Clock size={22} />
+          </button>
+          <button className="icon-btn" onClick={() => navigate('/insights')} title="Insights">
+            <BarChart2 size={22} />
+          </button>
+          <button className="icon-btn active" title="Chat">
+            <MessageCircle size={22} />
+          </button>
         </div>
       </div>
 
       {/* Main Chat Area */}
       <div className="chat-main">
         
-        {/* Top Status */}
+        {/* Status Bar */}
         <div className="status-bar">
-          <div className="status"><span className="dot green"></span>System Online</div>
-          <div className="status"><span className="dot orange"></span>AI Learning</div>
+          <div className="status-item">
+            <span className="status-dot green"></span>
+            <span>System Online</span>
+          </div>
+          <div className="status-item">
+            <span className="status-dot orange"></span>
+            <span>AI Learning</span>
+          </div>
         </div>
 
-        {/* Messages */}
-        <div className="messages-area">
-          {messages.map((msg, index) => (
-            <div key={index} className={`message ${msg.type}`}>
-              {msg.type === 'bot' && <div className="avatar"></div>}
-              <div className="bubble">{msg.text}</div>
-            </div>
-          ))}
-          
-          {isLoading && (
-            <div className="message bot">
-              <div className="avatar"></div>
-              <div className="bubble">
-                <div className="typing">
-                  <span></span><span></span><span></span>
+        {/* Messages Container */}
+        <div className="messages-container">
+          <div className="messages-area">
+            {messages.map((msg, index) => (
+              <div key={index} className={`message ${msg.type}`}>
+                <div className="message-avatar">
+                  {msg.type === 'bot' ? (
+                    <div className="avatar-bot">AI</div>
+                  ) : (
+                    <div className="avatar-user">U</div>
+                  )}
+                </div>
+                <div className="message-content">
+                  <div className="message-sender">
+                    {msg.type === 'bot' ? 'NEO' : 'You'}
+                  </div>
+                  <div className="message-bubble">
+                    {msg.text}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          
-          <div ref={messagesEndRef} />
+            ))}
+
+            {isLoading && (
+              <div className="message bot">
+                <div className="message-avatar">
+                  <div className="avatar-bot">AI</div>
+                </div>
+                <div className="message-content">
+                  <div className="message-sender">NEO</div>
+                  <div className="message-bubble">
+                    <div className="typing-indicator">
+                      <span></span><span></span><span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <div ref={messagesEndRef} />
+          </div>
         </div>
 
-        {/* Input */}
-        <div className="input-area">
-          {inputText && (
-            <button className="input-icon" onClick={() => setInputText('')}>
-              <X size={18} />
+        {/* Input Area */}
+        <div className="input-section">
+          <div className="input-wrapper">
+            {inputText && (
+              <button 
+                className="input-icon-btn" 
+                onClick={() => setInputText('')}
+                title="Clear"
+              >
+                <X size={18} />
+              </button>
+            )}
+            <input
+              type="text"
+              placeholder="Type your message..."
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyPress={handleKeyPress}
+              disabled={isLoading}
+              className="message-input"
+            />
+            <button 
+              className="send-btn" 
+              onClick={handleSend}
+              disabled={!inputText.trim() || isLoading}
+              title="Send"
+            >
+              <Send size={18} />
             </button>
-          )}
-          <input
-            type="text"
-            placeholder="type your message..."
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            onKeyPress={handleKeyPress}
-            disabled={isLoading}
-          />
-          <button 
-            className="send-button" 
-            onClick={handleSend}
-            disabled={!inputText.trim() || isLoading}
-          >
-            <Send size={18} />
-          </button>
+          </div>
         </div>
 
       </div>

@@ -1,6 +1,6 @@
 from services.ai_service import MentalHealthAI
 
-print("🧪 Testing AI Service...", flush=True)
+print(" Testing AI Service...", flush=True)
 ai = MentalHealthAI()
 
 test_message = "I'm feeling really anxious about work lately"

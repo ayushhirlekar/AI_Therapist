@@ -1,12 +1,8 @@
-// Brand Configuration - Easy to update branding
+// Brand Configuration - Professional & Calming
 export const BRAND_CONFIG = {
   name: 'Zenith',
-  tagline: 'Your Mental Health Companion',
-  logo: '🧠', // You can easily change this to any emoji or SVG later
-  colors: {
-    primary: 'coral-glow',
-    secondary: 'sunlit-apricot',
-    accent: 'ocean-mist'
-  },
-  // Future: Add voice settings, personality traits, etc.
+  tagline: 'Your mindful companion for mental wellness',
+  logo: '🧠', // Clean, professional brain emoji
+  description: 'A thoughtful AI companion designed to support your mental health journey with empathy, understanding, and personalized guidance.',
+  version: '1.0.0'
 };

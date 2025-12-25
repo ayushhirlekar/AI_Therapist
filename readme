@@ -1,6 +1,6 @@
-AI Therapist – Mental Health 
+🧠 AI Therapist
 
-Neo is an AI-powered mental health assistant designed to offer empathetic, context-aware conversations in a natural, Gen-Z–friendly tone. It integrates sentiment analysis to adapt responses based on the user’s emotional state, making interactions feel more supportive and personalized.
+Meet Neo , An AI-powered Therapist that speaks Genz it is designed to provide empathetic, context-aware conversations through structured conversational sessions., Gen-Z–friendly tone. It integrates sentiment analysis to adapt responses based on the user’s emotional state, making interactions feel more supportive and personalized.
 
 The project was built to explore how conversational AI can lower barriers to mental health support by providing an always-available, judgment-free space for reflection. Neo is not a replacement for professional care, but a complementary tool that helps users articulate thoughts, track mood patterns, and engage in meaningful self-dialogue.
 
@@ -8,8 +8,8 @@ The project was built to explore how conversational AI can lower barriers to men
 
 ## ✨ Features
 
-* 🤖 AI-powered empathetic conversations (Grok LLM)
-* 🧠 Context-aware chat sessions
+* 🤖 AI-powered empathetic conversations
+* 🧠 Context-aware real time voice sessions
 * ⚡ Real-time messaging using WebSockets
 * 🔊 Speech-to-text and text-to-speech support
 * 🗃️ Session storage using SQLite
